@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.swing.JOptionPane;
 import modelo.Cliente;
 import modelo.ClienteEstrella;
 import modelo.ClientePreferente;
@@ -59,11 +60,9 @@ public class ConsultasCliente {
             if (resultado != null) {
                 mapClienteE();
             }
-            
         } catch (SQLException e) {
-            System.out.println("Error en la consulta");
-            System.out.println(e.getMessage());
-        } finally{
+            JOptionPane.showMessageDialog(null, "Error en la consulta \n verifique el ID");            
+        }finally{
            objBD.cerrar(); 
         }
         return (ClienteEstrella)cliente;
@@ -87,8 +86,7 @@ public class ConsultasCliente {
             pstmt.setInt(2, ce.getId());
             pstmt.execute();
         } catch (SQLException e) {
-            System.out.println("Error en el registro");
-            System.out.println(e.getMessage());
+            JOptionPane.showMessageDialog(null, "Error en la insercion");
             return false;
         }finally{
             objBD.cerrar();
@@ -111,8 +109,7 @@ public class ConsultasCliente {
             pstmt.setInt(5, ce.getId());
             pstmt.execute();
         } catch (SQLException e) {
-            System.out.println("Error al modificar");
-            System.out.println(e.getMessage());
+            JOptionPane.showMessageDialog(null, "Error al modificar");
             return false;
         }finally{
             objBD.cerrar();
@@ -128,8 +125,7 @@ public class ConsultasCliente {
             pstmt.execute();
             
         } catch (SQLException e) {
-            System.out.println("Error al eliminar el registro");
-            System.out.println(e.getMessage());
+            JOptionPane.showMessageDialog(null, "Error al eliminar");
             return false;
         }finally{
             objBD.cerrar();
@@ -166,8 +162,7 @@ public class ConsultasCliente {
             }
             
         } catch (SQLException e) {
-            System.out.println("Error en la consulta");
-            System.out.println(e.getMessage());
+           JOptionPane.showMessageDialog(null, "Error en la consulta \n verifique el ID");
         } finally{
            objBD.cerrar(); 
         }
@@ -193,8 +188,7 @@ public class ConsultasCliente {
             pstmt.setInt(3, ce.getId());
             pstmt.execute();
         } catch (SQLException e) {
-            System.out.println("Error en el registro");
-            System.out.println(e.getMessage());
+            JOptionPane.showMessageDialog(null, "Error al agregar registro");
             return false;
         }finally{
             objBD.cerrar();
@@ -218,8 +212,7 @@ public class ConsultasCliente {
             pstmt.setInt(6, ce.getId());
             pstmt.execute();
         } catch (SQLException e) {
-            System.out.println("Error al modificar");
-            System.out.println(e.getMessage());
+            JOptionPane.showMessageDialog(null, "Error al modificar");
             return false;
         }finally{
             objBD.cerrar();

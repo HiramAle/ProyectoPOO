@@ -5,7 +5,10 @@
  */
 package vista;
 
+import controlador.ConsultasCliente;
 import javax.swing.JOptionPane;
+import modelo.ClienteEstrella;
+import modelo.ClientePreferente;
 
 /**
  *
@@ -80,6 +83,11 @@ public class adminClientes extends javax.swing.JFrame {
         });
 
         btnBuscar1.setText("Buscar");
+        btnBuscar1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscar1ActionPerformed(evt);
+            }
+        });
 
         lblNombre1.setText("Nombre:");
 
@@ -90,8 +98,18 @@ public class adminClientes extends javax.swing.JFrame {
         });
 
         BtnAgregar1.setText("Agregar");
+        BtnAgregar1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnAgregar1ActionPerformed(evt);
+            }
+        });
 
         btnModificar1.setText("Modificar");
+        btnModificar1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnModificar1ActionPerformed(evt);
+            }
+        });
 
         txtApP1.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
@@ -110,6 +128,11 @@ public class adminClientes extends javax.swing.JFrame {
         });
 
         BtnEliminar1.setText("Eliminar");
+        BtnEliminar1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnEliminar1ActionPerformed(evt);
+            }
+        });
 
         lblPromo1.setText("Promociones: ");
 
@@ -130,6 +153,11 @@ public class adminClientes extends javax.swing.JFrame {
         });
 
         btnLimpiar1.setText("Limpiar Campos");
+        btnLimpiar1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLimpiar1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout panelEstrellaLayout = new javax.swing.GroupLayout(panelEstrella);
         panelEstrella.setLayout(panelEstrellaLayout);
@@ -227,6 +255,11 @@ public class adminClientes extends javax.swing.JFrame {
         });
 
         btnBuscar.setText("Buscar");
+        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarActionPerformed(evt);
+            }
+        });
 
         lblNombre.setText("Nombre:");
 
@@ -284,12 +317,32 @@ public class adminClientes extends javax.swing.JFrame {
         });
 
         BtnAgregar.setText("Agregar");
+        BtnAgregar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnAgregarActionPerformed(evt);
+            }
+        });
 
         btnModificar.setText("Modificar");
+        btnModificar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnModificarActionPerformed(evt);
+            }
+        });
 
         BtnEliminar.setText("Eliminar");
+        BtnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnEliminarActionPerformed(evt);
+            }
+        });
 
         btnLimpiar.setText("Limpiar Campos");
+        btnLimpiar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLimpiarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout panelPreferenteLayout = new javax.swing.GroupLayout(panelPreferente);
         panelPreferente.setLayout(panelPreferenteLayout);
@@ -530,41 +583,163 @@ public class adminClientes extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_txtMontoHKeyTyped
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
+    private void btnBuscar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscar1ActionPerformed
+        if (txtId1.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(rootPane, "Ingresa un ID"); //valida que el campo id no este vacio
+        }else{
+            ConsultasCliente buscar = new ConsultasCliente();  //Se conecta a la Base de datos
+            ClienteEstrella clienteE = buscar.consultaClienteE(Integer.parseInt(txtId1.getText())); //regresa un objeto con los datos de la consulta
+            //Asigna valores a los campos de texto
+            try {
+                txtNombre1.setText(clienteE.getNombre()); 
+                txtApP1.setText(clienteE.getApellidoPaterno());
+                txtApM1.setText(clienteE.getApellidoMaterno());
+                txtMontoH.setText(String.valueOf(clienteE.getMontoHistoricoCompra()));
+            } catch (NullPointerException e) {
+                System.out.println("No se puedieron llenar los campos");
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(adminClientes.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(adminClientes.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(adminClientes.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(adminClientes.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
+            
+        } 
+    }//GEN-LAST:event_btnBuscar1ActionPerformed
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new adminClientes().setVisible(true);
+    private void BtnAgregar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnAgregar1ActionPerformed
+        if (txtId1.getText().isEmpty() || txtNombre1.getText().isEmpty() || txtApP1.getText().isEmpty() || txtApM1.getText().isEmpty() || txtMontoH.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(rootPane, "llena todos los campos"); //valida que no haya campos vacios  
+        }else{
+            ConsultasCliente alta = new ConsultasCliente();  //Se conecta a la Base de datos
+            ClienteEstrella clienteE = new ClienteEstrella();
+            // Toma los datos de los campos de texto
+            clienteE.setId(Integer.parseInt(txtId1.getText()));
+            clienteE.setNombre(txtNombre1.getText());
+            clienteE.setApellidoPaterno(txtApP1.getText());
+            clienteE.setApellidoMaterno(txtApM1.getText());
+            clienteE.setMontoHistoricoCompra(Double.parseDouble(txtMontoH.getText()));
+            clienteE.setPromociones(false);
+            if (alta.altaClienteE(clienteE)) {//Realiza el Alta 
+                JOptionPane.showMessageDialog(rootPane, "Registro Exitoso");
             }
-        });
-    }
+        }
+    }//GEN-LAST:event_BtnAgregar1ActionPerformed
+
+    private void btnModificar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificar1ActionPerformed
+        if (txtId1.getText().isEmpty() || txtNombre1.getText().isEmpty() || txtApP1.getText().isEmpty() || txtApM1.getText().isEmpty() || txtMontoH.getText().isEmpty()) {
+           JOptionPane.showMessageDialog(rootPane, "llena todos los campos"); //valida que no haya campos vacios 
+        }else{
+            ConsultasCliente update = new ConsultasCliente();  //Se conecta a la Base de datos
+            ClienteEstrella clienteE = new ClienteEstrella();
+            // Toma los datos de los campos de texto
+            clienteE.setId(Integer.parseInt(txtId1.getText()));
+            clienteE.setNombre(txtNombre1.getText());
+            clienteE.setApellidoPaterno(txtApP1.getText());
+            clienteE.setApellidoMaterno(txtApM1.getText());
+            clienteE.setMontoHistoricoCompra(Double.parseDouble(txtMontoH.getText()));
+            clienteE.setPromociones(false);
+            if (update.modicaClienteE(clienteE)) {//Realiza el Alta 
+                JOptionPane.showMessageDialog(rootPane, "Actualizacion Exitosa");
+            }
+        }
+    }//GEN-LAST:event_btnModificar1ActionPerformed
+
+    private void BtnEliminar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnEliminar1ActionPerformed
+        if (txtId1.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(rootPane, "Ingresa un ID"); //valida que el campo id no este vacio
+        }else{
+            int id = Integer.parseInt(txtId1.getText());
+            ConsultasCliente eliminar = new ConsultasCliente();  //Se conecta a la Base de datos
+            if (eliminar.eliminaCliente(id)) {
+                JOptionPane.showMessageDialog(rootPane, "Se elimino este registro");
+            }
+        }
+    }//GEN-LAST:event_BtnEliminar1ActionPerformed
+
+    private void btnLimpiar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiar1ActionPerformed
+        txtId1.setText("");
+        txtNombre1.setText("");
+        txtApP1.setText("");
+        txtApM1.setText("");
+        txtMontoH.setText("");
+    }//GEN-LAST:event_btnLimpiar1ActionPerformed
+
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+        if (txtId.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(rootPane, "Ingresa un ID"); //valida que el campo id no este vacio
+        }else{
+            ConsultasCliente buscar = new ConsultasCliente();  //Se conecta a la Base de datos
+            ClientePreferente clienteP = buscar.consultaClienteP(Integer.parseInt(txtId.getText())); //regresa un objeto con los datos de la consulta
+            //Asigna valores a los campos de texto
+            try {
+                txtNombre.setText(clienteP.getNombre()); 
+                txtApP.setText(clienteP.getApellidoPaterno());
+                txtApM.setText(clienteP.getApellidoMaterno());
+                txtMontoC.setText(String.valueOf(clienteP.getMontoCredito()));
+                txtAdeudo.setText(String.valueOf(clienteP.getAdeudo()));
+            } catch (NullPointerException e) {
+                System.out.println("No se puedieron llenar los campos");
+            }
+            
+        } 
+    }//GEN-LAST:event_btnBuscarActionPerformed
+
+    private void BtnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnAgregarActionPerformed
+        if (txtId.getText().isEmpty() || txtNombre.getText().isEmpty() || txtApP.getText().isEmpty() || txtApM.getText().isEmpty() || txtMontoC.getText().isEmpty() || txtAdeudo.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(rootPane, "llena todos los campos"); //valida que no haya campos vacios  
+        }else{
+            ConsultasCliente alta = new ConsultasCliente();  //Se conecta a la Base de datos
+            ClientePreferente clienteP = new ClientePreferente();
+            // Toma los datos de los campos de texto
+            clienteP.setId(Integer.parseInt(txtId.getText()));
+            clienteP.setNombre(txtNombre.getText());
+            clienteP.setApellidoPaterno(txtApP.getText());
+            clienteP.setApellidoMaterno(txtApM.getText());
+            clienteP.setMontoCredito(Double.parseDouble(txtMontoC.getText()));
+            clienteP.setAdeudo(Double.parseDouble(txtAdeudo.getText()));
+            clienteP.setPromociones(true);
+            if (alta.altaClienteP(clienteP)) {//Realiza el Alta 
+                JOptionPane.showMessageDialog(rootPane, "Registro Exitoso");
+            }
+        }
+    }//GEN-LAST:event_BtnAgregarActionPerformed
+
+    private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
+        if (txtId.getText().isEmpty() || txtNombre.getText().isEmpty() || txtApP.getText().isEmpty() || txtApM.getText().isEmpty() || txtMontoC.getText().isEmpty() || txtAdeudo.getText().isEmpty()) {
+           JOptionPane.showMessageDialog(rootPane, "llena todos los campos"); //valida que no haya campos vacios 
+        }else{
+            ConsultasCliente update = new ConsultasCliente();  //Se conecta a la Base de datos
+            ClientePreferente clienteP = new ClientePreferente();
+            // Toma los datos de los campos de texto
+            clienteP.setId(Integer.parseInt(txtId.getText()));
+            clienteP.setNombre(txtNombre.getText());
+            clienteP.setApellidoPaterno(txtApP.getText());
+            clienteP.setApellidoMaterno(txtApM.getText());
+            clienteP.setMontoCredito(Double.parseDouble(txtMontoC.getText()));
+            clienteP.setAdeudo(Double.parseDouble(txtAdeudo.getText()));
+            clienteP.setPromociones(true);
+            if (update.modicaClienteP(clienteP)) {//Realiza el Alta 
+                JOptionPane.showMessageDialog(rootPane, "Actualizacion Exitosa");
+            }
+        }
+    }//GEN-LAST:event_btnModificarActionPerformed
+
+    private void BtnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnEliminarActionPerformed
+        if (txtId.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(rootPane, "Ingresa un ID"); //valida que el campo id no este vacio
+        }else{
+            int id = Integer.parseInt(txtId.getText());
+            ConsultasCliente eliminar = new ConsultasCliente();  //Se conecta a la Base de datos
+            if (eliminar.eliminaCliente(id)) {
+                JOptionPane.showMessageDialog(rootPane, "Se elimino este registro");
+            }
+        }
+    }//GEN-LAST:event_BtnEliminarActionPerformed
+
+    private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
+        txtId.setText("");
+        txtNombre.setText("");
+        txtApP.setText("");
+        txtApM.setText("");
+        txtMontoC.setText("");
+        txtAdeudo.setText("");
+    }//GEN-LAST:event_btnLimpiarActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BtnAgregar;
