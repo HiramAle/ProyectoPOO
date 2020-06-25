@@ -6,6 +6,7 @@
 package modelo;
 
 import controlador.ConsultasCliente;
+import vista.AdminAcceso;
 
 /**
  *
@@ -23,9 +24,8 @@ public class MainProvicional {
         ConsultasCliente consul2 = new ConsultasCliente();
         clienteE = new  ClienteEstrella(14568, "Alejandra", "Orozco", "Aguilar", true, 450.69);
         consul2.altaClienteE(clienteE);*/
-        ConsultasCliente consul2 = new ConsultasCliente();
-        ClientePreferente clienteE = new  ClientePreferente (14589, "Alejandra", "Orozco", "Aguilar", true, 450.69, 6590.90);
-        consul2.modicaClienteP(clienteE);
+        AdminAcceso ventanaLogin = new AdminAcceso();
+        ventanaLogin.acceso();
     }
     
 }
