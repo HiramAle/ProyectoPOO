@@ -32,7 +32,7 @@ public class ConsultasCliente {
         con = objBD.getConexion();
     }
     
-    //mapeo CleinteEstrella 
+    //mapeo ClienteEstrella 
     public void mapClienteE() throws SQLException{
         resultado.next();
         int id = resultado.getInt("id_cliente");
@@ -89,4 +89,44 @@ public class ConsultasCliente {
         return true;
     }
     
+    //Modificar Cliente Estrella
+    public boolean modicaClienteE(ClienteEstrella ce){
+        try {
+            pstmt = con.prepareStatement("update cliente c inner join clienteestrella ce " +
+                                         "on c.id_cliente = ce.id_cliente " +
+                                         "set c.nombre =?, c.apP =?, c.apM =?, ce.montoHistoricoCompra =? " +
+                                         "where c.id_cliente = ?");
+            
+            pstmt.setString(1, ce.getNombre());
+            pstmt.setString(2, ce.getApellidoPaterno());
+            pstmt.setString(3, ce.getApellidoMaterno());
+            pstmt.setDouble(4,ce.getMontoHistoricoCompra());
+            pstmt.setInt(5, ce.getId());
+            pstmt.execute();
+        } catch (SQLException e) {
+            System.out.println("Error al modificar");
+            System.out.println(e.getMessage());
+            return false;
+        }finally{
+            objBD.cerrar();
+        }
+        return true;
+    }
+    
+    //Eliminar Ambos tipos de clientes por el "on delete cascade" de la base de datos 
+    public boolean eliminaCliente(int id){
+        try {
+            pstmt = con.prepareStatement("delete from cliente where id_cliente= ?");
+            pstmt.setInt(1, id);
+            pstmt.execute();
+            
+        } catch (SQLException e) {
+            System.out.println("Error al eliminar el registro");
+            System.out.println(e.getMessage());
+            return false;
+        }finally{
+            objBD.cerrar();
+        }
+        return true;
+    }
 }
