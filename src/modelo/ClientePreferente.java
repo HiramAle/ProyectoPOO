@@ -17,7 +17,7 @@ public class ClientePreferente extends Cliente{
         super();
     }
 
-    public ClientePreferente(double montoCredito, double adeudo, int id, boolean promociones, String nombre, String apellidoPaterno, String apellidoMaterno) {
+    public ClientePreferente(int id, String nombre, String apellidoPaterno, String apellidoMaterno, boolean promociones,double montoCredito, double adeudo) {
         super(id, promociones, nombre, apellidoPaterno, apellidoMaterno);
         this.montoCredito = montoCredito;
         this.adeudo = adeudo;

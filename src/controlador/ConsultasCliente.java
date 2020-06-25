@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import modelo.Cliente;
 import modelo.ClienteEstrella;
+import modelo.ClientePreferente;
 
 /**
  *
@@ -73,11 +74,17 @@ public class ConsultasCliente {
         pstmt = null;
         try {
             pstmt = con.prepareStatement("INSERT INTO cliente (id_cliente, nombre, apP, apM, promociones) "
-                    + "VALUES (?, ?, ?, ?, 1);");
+                    + "VALUES (?, ?, ?, ?, 0)");
             pstmt.setInt(1, ce.getId());
             pstmt.setString(2, ce.getNombre());
             pstmt.setString(3, ce.getApellidoPaterno());
             pstmt.setString(4, ce.getApellidoMaterno());
+            pstmt.execute();
+            pstmt = null;
+            pstmt = con.prepareStatement("INSERT INTO clienteestrella (montoHistoricoCompra, id_cliente) "
+                    + "VALUES (?, ?)");
+            pstmt.setDouble(1, ce.getMontoHistoricoCompra());
+            pstmt.setInt(2, ce.getId());
             pstmt.execute();
         } catch (SQLException e) {
             System.out.println("Error en el registro");
@@ -122,6 +129,96 @@ public class ConsultasCliente {
             
         } catch (SQLException e) {
             System.out.println("Error al eliminar el registro");
+            System.out.println(e.getMessage());
+            return false;
+        }finally{
+            objBD.cerrar();
+        }
+        return true;
+    }
+    
+    //mapeo ClientePreferente 
+    public void mapClienteP() throws SQLException{
+        resultado.next();
+        int id = resultado.getInt("id_cliente");
+        String nombre = resultado.getString("nombre");
+        String apellidoP = resultado.getString("apP");
+        String apellidoM = resultado.getString("apM");
+        boolean promociones = true; 
+        double montoCredito = resultado.getDouble("montoCredito");
+        double adeudo = resultado.getDouble("adeudo");
+        cliente = new ClientePreferente(id,nombre,apellidoP,apellidoM,promociones,montoCredito,adeudo);
+    }
+    
+    
+    //Consulta ClientePreferente
+    public ClientePreferente consultaClienteP(int id){
+        cliente = null;
+        try {
+            pstmt = con.prepareStatement("select c.id_cliente, c.nombre, c.apP, c.apM, c.promociones, cp.montoCredito, cp.adeudo " +
+                                        "from cliente c inner join clientepreferente cp " +
+                                        "on c.id_cliente = cp.id_cliente " +
+                                        "where c.id_cliente = ? ");
+            pstmt.setInt(1, id);
+            resultado = pstmt.executeQuery();
+            if (resultado != null) {
+                mapClienteP();
+            }
+            
+        } catch (SQLException e) {
+            System.out.println("Error en la consulta");
+            System.out.println(e.getMessage());
+        } finally{
+           objBD.cerrar(); 
+        }
+        return (ClientePreferente)cliente;
+    }
+   
+    //Agregar Cliente Preferente
+    public boolean altaClienteP (ClientePreferente ce){
+        pstmt = null;
+        try {
+            pstmt = con.prepareStatement("INSERT INTO cliente (id_cliente, nombre, apP, apM, promociones) "
+                    + "VALUES (?, ?, ?, ?, 1)");
+            pstmt.setInt(1, ce.getId());
+            pstmt.setString(2, ce.getNombre());
+            pstmt.setString(3, ce.getApellidoPaterno());
+            pstmt.setString(4, ce.getApellidoMaterno());
+            pstmt.execute();
+            pstmt = null;
+            pstmt = con.prepareStatement("INSERT INTO clientepreferente (montoCredito, adeudo, id_cliente) "
+                    + "VALUES (?, ?, ?)");
+            pstmt.setDouble(1, ce.getMontoCredito());
+            pstmt.setDouble(2, ce.getAdeudo());
+            pstmt.setInt(3, ce.getId());
+            pstmt.execute();
+        } catch (SQLException e) {
+            System.out.println("Error en el registro");
+            System.out.println(e.getMessage());
+            return false;
+        }finally{
+            objBD.cerrar();
+        }
+        return true;
+    }
+  
+    //Modificar Cliente Preferente
+    public boolean modicaClienteP(ClientePreferente ce){
+        try {
+            pstmt = con.prepareStatement("update cliente c inner join clientepreferente ce " +
+                                        "on c.id_cliente = ce.id_cliente " +
+                                        "set c.nombre =? ,c.apP =? ,c.apM =? ,ce.montoCredito=?, ce.adeudo =? " +
+                                        "where c.id_cliente = ? ");
+            
+            pstmt.setString(1, ce.getNombre());
+            pstmt.setString(2, ce.getApellidoPaterno());
+            pstmt.setString(3, ce.getApellidoMaterno());
+            pstmt.setDouble(4,ce.getMontoCredito());
+            pstmt.setDouble(5,ce.getAdeudo());
+            pstmt.setInt(6, ce.getId());
+            pstmt.execute();
+        } catch (SQLException e) {
+            System.out.println("Error al modificar");
             System.out.println(e.getMessage());
             return false;
         }finally{
