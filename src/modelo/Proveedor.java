@@ -35,4 +35,8 @@ public class Proveedor {
         this.telefono = telefono;
     }
     
+    public void surtir(Producto[] prod []){
+        
+    }
+    
 }

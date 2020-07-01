@@ -1,5 +1,6 @@
 package modelo;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -47,9 +48,11 @@ public class Compra {
     public void setPds(ArrayList<Producto> pds) {
         this.pds = pds;
     }
-    
-    
-    
+    /* Metodo comentado para que no ocacione errores
+    public File consultarDesglose(){
+        
+    }
+    */
     
     
 }

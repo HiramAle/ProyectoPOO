@@ -75,6 +75,9 @@ public class Producto {
         this.proveedor = proveedor;
     }
     
+    public int verExistencias(){
+        return 0;
+    }
     
     
 }
