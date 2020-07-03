@@ -56,10 +56,10 @@ public class ConsultasProductoProvedor {
             
             if (resultado != null) {
                 mapProveedor();
-                System.out.println("out");
             }
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Error en la consulta \n verifique el ID");            
+            JOptionPane.showMessageDialog(null, "No existe proveedor con ese ID");            
+            
         }
         return (Proveedor)proveedor;
     }
@@ -90,8 +90,7 @@ public class ConsultasProductoProvedor {
                 mapProducto();
             }
         } catch (SQLException e) {
-            System.out.println(e);
-            JOptionPane.showMessageDialog(null, "Error en la consulta \n verifique el ID");            
+            JOptionPane.showMessageDialog(null, "No existe producto con ese ID");            
         }finally{
             objBD.cerrar();
         }
@@ -99,7 +98,7 @@ public class ConsultasProductoProvedor {
     }
     
     //Alta Producto
-    public boolean altaProducto (Producto producto,int idproveedor){
+    public boolean altaProducto (Producto producto,Proveedor proveedor){
         pstmt = null;
         try {
             pstmt = con.prepareStatement("INSERT INTO producto VALUES (?,?,?,?,?,?,?,?)");
@@ -110,11 +109,48 @@ public class ConsultasProductoProvedor {
             pstmt.setDouble(5, producto.getPrecioVentaMayoreo());
             pstmt.setDouble(6, producto.getPrecioVentaMenudeo());
             pstmt.setInt(7, 0);
-            pstmt.setInt(8, idproveedor);
+            pstmt.setInt(8, proveedor.getId());
             pstmt.execute();
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Error en la insercion");
+            JOptionPane.showMessageDialog(null, "Ya existe un producto con ese ID");
             return false;
+        }
+        return true;
+    }
+    
+    //Modificar Producto
+    public boolean modProducto(Producto producto){
+        try {
+            pstmt = con.prepareStatement("UPDATE producto set marca = ?, descripcion = ?, precioCompra = ?, precioMayoreo = ?, precioMenudeo =?,  id_provedor = ? where id_producto = ?");
+            pstmt.setString(1, producto.getMarca());
+            pstmt.setString(2, producto.getDescripcion());
+            pstmt.setDouble(3, producto.getPrecioCompra());
+            pstmt.setDouble(4, producto.getPrecioVentaMayoreo());
+            pstmt.setDouble(5, producto.getPrecioVentaMenudeo());
+            pstmt.setInt(6, producto.getProveedor().getId());
+            pstmt.setInt(7, producto.getId());
+            pstmt.execute();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error al modificar");
+            System.out.println(e);
+            return false;
+        }finally{
+            objBD.cerrar();
+        }
+        return true;
+    }
+    
+    //Baja Producto
+    public boolean eliminarProducto (int id){
+        try {
+            pstmt = con.prepareStatement("DELETE from producto where id_producto = ?");
+            pstmt.setInt(1, id);
+            pstmt.execute();
+        } catch (SQLException e) {
+        //JOptionPane.showMessageDialog(null, "No existe producto con ese ID");
+            return false;
+        }finally{
+            objBD.cerrar();
         }
         return true;
     }
