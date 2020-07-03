@@ -23,6 +23,13 @@ CREATE TABLE IF NOT EXISTS cliente (
     promociones boolean
 ); 
 
+CREATE TABLE IF NOT EXISTS provedor (
+	id_provedor INT NOT NULL PRIMARY KEY,
+    compañia VARCHAR(40) NOT NULL,
+    direccion VARCHAR(150),
+    telefono VARCHAR(10)
+); 
+
 CREATE TABLE IF NOT EXISTS producto (
 	id_producto INT NOT NULL PRIMARY KEY,
     marca VARCHAR(40) NOT NULL,
@@ -30,14 +37,9 @@ CREATE TABLE IF NOT EXISTS producto (
     precioCompra DOUBLE NOT NULL,
     precioMayoreo DOUBLE NOT NULL,
     precioMenudeo DOUBLE NOT NULL,
-    existencias  INT
-); 
-
-CREATE TABLE IF NOT EXISTS provedor (
-	id_provedor INT NOT NULL PRIMARY KEY,
-    compañia VARCHAR(40) NOT NULL,
-    direccion VARCHAR(150),
-    telefono VARCHAR(10)
+    existencias  INT,
+    id_provedor INT,
+    foreign key (id_provedor) references provedor(id_provedor) on delete cascade on update cascade
 ); 
 
 CREATE TABLE IF NOT EXISTS compra (
@@ -83,12 +85,10 @@ CREATE TABLE IF NOT EXISTS venta_producto (
 CREATE TABLE IF NOT EXISTS compra_producto (
 	id_compra INT NOT NULL,
     id_producto INT NOT NULL,
-    id_provedor INT NOT NULL,
     cantidad INT NOT NULL,
-    primary key (id_compra, id_producto, id_provedor),
+    primary key (id_compra, id_producto),
     foreign key (id_compra) references compra(id_compra) on delete cascade on update cascade,
-    foreign key (id_producto) references producto(id_producto) on delete cascade on update cascade,
-    foreign key (id_provedor) references provedor(id_provedor) on delete cascade on update cascade
+    foreign key (id_producto) references producto(id_producto) on delete cascade on update cascade
 ); 
 
 CREATE TABLE IF NOT EXISTS accesoAdmin (

@@ -33,11 +33,11 @@ INSERT INTO provedor (id_provedor, compañia, direccion, telefono) VALUES (36789
 INSERT INTO provedor (id_provedor, compañia, direccion, telefono) VALUES (39681, 'Lala', 'Calle 15 Col.Tlatelolco', '6723456555');
 
 -- Datos prueba producto
-INSERT INTO producto (id_producto, marca, descripcion, precioCompra, precioMayoreo, precioMenudeo, existencias) VALUES (47892, 'Crema Lala', 'Crema acida 250g ', 15, 18, 22, 84);
-INSERT INTO producto (id_producto, marca, descripcion, precioCompra, precioMayoreo, precioMenudeo, existencias) VALUES (45678, 'Crema Alpura', 'Crema acida 500g', 18, 20, 24, 22);
-INSERT INTO producto (id_producto, marca, descripcion, precioCompra, precioMayoreo, precioMenudeo, existencias) VALUES (49673, 'Huevo', '18pzs', 20, 24, 28, 31);
-INSERT INTO producto (id_producto, marca, descripcion, precioCompra, precioMayoreo, precioMenudeo, existencias) VALUES (46780, 'Leche Entera', 'Leche entera 1Lt', 15, 18, 20, 116);
-INSERT INTO producto (id_producto, marca, descripcion, precioCompra, precioMayoreo, precioMenudeo, existencias) VALUES (46972, 'Leche Deslactosada', 'Leche deslactosada 2Lt', 20, 22, 24, 10);
+INSERT INTO producto (id_producto, marca, descripcion, precioCompra, precioMayoreo, precioMenudeo, existencias, id_provedor) VALUES (47892, 'Crema Lala', 'Crema acida 250g ', 15, 18, 22, 84, 39681);
+INSERT INTO producto (id_producto, marca, descripcion, precioCompra, precioMayoreo, precioMenudeo, existencias, id_provedor) VALUES (45678, 'Crema Alpura', 'Crema acida 500g', 18, 20, 24, 22,36789);
+INSERT INTO producto (id_producto, marca, descripcion, precioCompra, precioMayoreo, precioMenudeo, existencias, id_provedor) VALUES (49673, 'Huevo', '18pzs', 20, 24, 28, 31, 35680);
+INSERT INTO producto (id_producto, marca, descripcion, precioCompra, precioMayoreo, precioMenudeo, existencias, id_provedor) VALUES (46780, 'Leche Entera', 'Leche entera 1Lt', 15, 18, 20, 116, 39681);
+INSERT INTO producto (id_producto, marca, descripcion, precioCompra, precioMayoreo, precioMenudeo, existencias, id_provedor) VALUES (46972, 'Leche Deslactosada', 'Leche deslactosada 2Lt', 20, 22, 24, 10, 36789);
 
 -- Datos prueba Compra
 INSERT INTO compra (id_compra, fecha, monto) VALUES (59845, '2020-05-14', 400.0);
@@ -45,13 +45,13 @@ INSERT INTO compra (id_compra, fecha, monto) VALUES (52789, '2020-04-28', 550.5)
 INSERT INTO compra (id_compra, fecha, monto) VALUES (56789, '2020-03-10', 600.0);
 
 -- Datos prueba Compra_Producto
-INSERT INTO compra_producto (id_compra, id_producto, id_provedor, cantidad) VALUES (59845, 47892, 39681, 50);
-INSERT INTO compra_producto (id_compra, id_producto, id_provedor, cantidad) VALUES (59845, 46780, 39681, 60);
-INSERT INTO compra_producto (id_compra, id_producto, id_provedor, cantidad) VALUES (52789, 46972, 36789, 25);
-INSERT INTO compra_producto (id_compra, id_producto, id_provedor, cantidad) VALUES (52789, 47892, 39681, 45);
-INSERT INTO compra_producto (id_compra, id_producto, id_provedor, cantidad) VALUES (52789, 49673, 35680, 34);
-INSERT INTO compra_producto (id_compra, id_producto, id_provedor, cantidad) VALUES (56789, 46780, 36789, 60);
-INSERT INTO compra_producto (id_compra, id_producto, id_provedor, cantidad) VALUES (56789, 45678, 36789, 26);
+INSERT INTO compra_producto (id_compra, id_producto, cantidad) VALUES (59845, 47892,  50);
+INSERT INTO compra_producto (id_compra, id_producto, cantidad) VALUES (59845, 46780,  60);
+INSERT INTO compra_producto (id_compra, id_producto, cantidad) VALUES (52789, 46972,  25);
+INSERT INTO compra_producto (id_compra, id_producto, cantidad) VALUES (52789, 47892,  45);
+INSERT INTO compra_producto (id_compra, id_producto, cantidad) VALUES (52789, 49673,  34);
+INSERT INTO compra_producto (id_compra, id_producto, cantidad) VALUES (56789, 46780,  60);
+INSERT INTO compra_producto (id_compra, id_producto, cantidad) VALUES (56789, 45678,  26);
 
 -- Datos prueba Ventas 
 INSERT INTO venta (id_venta, fecha, monto, id_vendedor, id_cliente) VALUES (67893, '2020-04-29', 72, 23569, 14589);
