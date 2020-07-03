@@ -391,7 +391,7 @@
                           <Component id="lblAdeudo" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="txtAdeudo" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="32" max="32767" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                       <Component id="btnLimpiar" min="-2" pref="23" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="54" max="-2" attributes="0"/>
                   </Group>
