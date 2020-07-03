@@ -13,6 +13,9 @@ public class Proveedor {
         this.telefono = telefono;
     }
 
+    public Proveedor() {
+    }
+
     public int getId() {
         return id;
     }
