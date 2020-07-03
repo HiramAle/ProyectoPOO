@@ -1,14 +1,24 @@
 package modelo;
 
 public class Proveedor {
+    private int id;
     private String compania;
     private String direccion;
     private long telefono;
 
-    public Proveedor(String compania, String direccion, long telefono) {
+    public Proveedor(int id, String compania, String direccion, long telefono) {
+        this.id = id;
         this.compania = compania;
         this.direccion = direccion;
         this.telefono = telefono;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getCompania() {

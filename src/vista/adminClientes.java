@@ -21,6 +21,7 @@ public class adminClientes extends javax.swing.JFrame {
      */
     public adminClientes() {
         initComponents();
+        this.setTitle("Administración Clientes");
     }
 
     /**
