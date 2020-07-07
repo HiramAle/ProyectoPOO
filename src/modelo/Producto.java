@@ -4,12 +4,13 @@ public class Producto {
     private int id;
     private String marca;
     private String descripcion;
-    private String precioCompra;
+    private double precioCompra;
     private double precioVentaMenudeo;
     private double precioVentaMayoreo;
     private Proveedor proveedor;
+    private int existencias;
 
-    public Producto(int id, String marca, String descripcion, String precioCompra, double precioVentaMenudeo, double precioVentaMayoreo, Proveedor proveedor) {
+    public Producto(int id, String marca, String descripcion, double precioCompra, double precioVentaMenudeo, double precioVentaMayoreo, Proveedor proveedor, int existencias) {
         this.id = id;
         this.marca = marca;
         this.descripcion = descripcion;
@@ -17,7 +18,13 @@ public class Producto {
         this.precioVentaMenudeo = precioVentaMenudeo;
         this.precioVentaMayoreo = precioVentaMayoreo;
         this.proveedor = proveedor;
+        this.existencias = existencias;
     }
+
+    public Producto() {
+    }
+    
+    
 
     public int getId() {
         return id;
@@ -43,11 +50,11 @@ public class Producto {
         this.descripcion = descripcion;
     }
 
-    public String getPrecioCompra() {
+    public double getPrecioCompra() {
         return precioCompra;
     }
 
-    public void setPrecioCompra(String precioCompra) {
+    public void setPrecioCompra(double precioCompra) {
         this.precioCompra = precioCompra;
     }
 
@@ -74,9 +81,19 @@ public class Producto {
     public void setProveedor(Proveedor proveedor) {
         this.proveedor = proveedor;
     }
+
+    public int getExistencias() {
+        return existencias;
+    }
+
+    public void setExistencias(int existencias) {
+        this.existencias = existencias;
+    }
+    
+    
     
     public int verExistencias(){
-        return 0;
+        return getExistencias();
     }
     
     
