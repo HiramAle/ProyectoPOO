@@ -26,10 +26,13 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" pref="61" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Component id="btnProductos" pref="249" max="32767" attributes="0"/>
-                  <Component id="lblGestionar" alignment="1" max="32767" attributes="0"/>
-                  <Component id="btnClientes" alignment="1" pref="249" max="32767" attributes="0"/>
-                  <Component id="btnVentas" alignment="1" max="32767" attributes="0"/>
+                  <Component id="btnCompras" pref="249" max="32767" attributes="0"/>
+                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                      <Component id="btnProductos" pref="249" max="32767" attributes="0"/>
+                      <Component id="lblGestionar" alignment="1" max="32767" attributes="0"/>
+                      <Component id="btnClientes" alignment="1" pref="249" max="32767" attributes="0"/>
+                      <Component id="btnVentas" alignment="1" max="32767" attributes="0"/>
+                  </Group>
               </Group>
               <EmptySpace pref="90" max="32767" attributes="0"/>
           </Group>
@@ -46,7 +49,9 @@
               <Component id="btnVentas" min="-2" pref="38" max="-2" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="btnProductos" min="-2" pref="42" max="-2" attributes="0"/>
-              <EmptySpace pref="64" max="32767" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <Component id="btnCompras" min="-2" pref="42" max="-2" attributes="0"/>
+              <EmptySpace pref="57" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -76,6 +81,14 @@
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnProductosActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="btnCompras">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Compras"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnComprasActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>
