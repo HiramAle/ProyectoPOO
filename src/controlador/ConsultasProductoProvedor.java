@@ -152,7 +152,7 @@ public class ConsultasProductoProvedor {
             pstmt.setInt(1, id);
             pstmt.execute();
         } catch (SQLException e) {
-            //JOptionPane.showMessageDialog(null, "No existe producto con ese ID");
+            JOptionPane.showMessageDialog(null, "No existe producto con ese ID");
             return false;
         } finally {
             objBD.cerrar();
