@@ -21,7 +21,10 @@ public class adminProductos extends javax.swing.JFrame {
      * Creates new form adminProductos
      */
     public adminProductos() {
+        //Inicializa los componentes
         initComponents();
+        //Establece el título de la ventana
+        this.setTitle("Productos");
     }
 
     /**
@@ -349,8 +352,9 @@ public class adminProductos extends javax.swing.JFrame {
             try {
                 Producto producto = new Producto();
                 producto = eliminar.consultaProducto(id);
-                if (eliminar.eliminarProducto(id)) {
+                if (eliminar.eliminarProducto(id)) {  //Elimina el registro
                     JOptionPane.showMessageDialog(rootPane, "Se elimino este registro");
+                    //Limpia los campos
                     txtBuscar.setText("");
                     txtMarca.setText("");
                     txtDescripcion.setText("");
@@ -364,7 +368,7 @@ public class adminProductos extends javax.swing.JFrame {
                     txtTelefono.setText("");
                 }
             } catch (NullPointerException e) {
-
+                System.out.println(e);
             }
 
         }
@@ -391,15 +395,14 @@ public class adminProductos extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(rootPane, "Actualizacion Exitosa");
                 }
             } catch (NullPointerException e) {
-                txtCompania.setText("");
-                txtDireccion.setText("");
-                txtTelefono.setText("");
+                System.out.println(e);
             }
 
         }
     }//GEN-LAST:event_btnModActionPerformed
 
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
+        //Establece todos los campos de texto en blanco
         txtBuscar.setText("");
         txtMarca.setText("");
         txtDescripcion.setText("");
@@ -420,6 +423,7 @@ public class adminProductos extends javax.swing.JFrame {
             ConsultasProductoProvedor alta = new ConsultasProductoProvedor();
             Producto producto = new Producto();
             try {
+                //Toma los datos
                 Proveedor proveedor = alta.consultaProveedor(Integer.parseInt(txtIdProveedor.getText()));
                 producto.setId(Integer.parseInt(txtBuscar.getText()));
                 producto.setMarca(txtMarca.getText());
@@ -429,6 +433,7 @@ public class adminProductos extends javax.swing.JFrame {
                 producto.setPrecioVentaMenudeo(Double.parseDouble(txtPMenudeo.getText()));
                 producto.setExistencias(0);
                 producto.setProveedor(proveedor);
+                //Revisa que el alta se haya completado
                 if (alta.altaProducto(producto, proveedor)) {
                     JOptionPane.showMessageDialog(rootPane, "Registro Exitoso");
                 }
@@ -437,23 +442,23 @@ public class adminProductos extends javax.swing.JFrame {
                 txtDireccion.setText("");
                 txtTelefono.setText("");
             }
-            //Toma los datos
-
         }
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
     private void btnBuscarProvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarProvActionPerformed
         if (txtIdProveedor.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(rootPane, "Ingresa un ID");
+            JOptionPane.showMessageDialog(rootPane, "Ingresa un ID");//Valida que el campo no esté vacío
         } else {
             ConsultasProductoProvedor buscar = new ConsultasProductoProvedor();
             try {
+                //Llena los campos
                 Proveedor proveedor = buscar.consultaProveedor(Integer.parseInt(txtIdProveedor.getText()));
                 txtIdProveedor.setText(Integer.toString(proveedor.getId()));
                 txtCompania.setText(proveedor.getCompania());
                 txtDireccion.setText(proveedor.getDireccion());
                 txtTelefono.setText(Long.toString(proveedor.getTelefono()));
             } catch (NullPointerException e) {
+                //Limpia los campos si no encuentra nada
                 txtCompania.setText("");
                 txtDireccion.setText("");
                 txtTelefono.setText("");
@@ -467,6 +472,7 @@ public class adminProductos extends javax.swing.JFrame {
     }//GEN-LAST:event_txtCompaniaActionPerformed
 
     private void txtIdProveedorKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtIdProveedorKeyTyped
+        //Valida solo números
         char validar = evt.getKeyChar();
         if (Character.isLetter(validar)) {
             getToolkit().beep();
@@ -477,11 +483,13 @@ public class adminProductos extends javax.swing.JFrame {
 
     private void txtPMenudeoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPMenudeoKeyTyped
         char validar = evt.getKeyChar();
+        //Valida solo números
         if (Character.isLetter(validar)) {
             getToolkit().beep();
             evt.consume();
             JOptionPane.showMessageDialog(rootPane, "ingresar solo numeros");
         }
+        //Valida solo un punto decimal
         if (evt.getKeyChar() == '.' && txtPMenudeo.getText().contains(".")) {
             getToolkit().beep();
             evt.consume();
@@ -491,11 +499,13 @@ public class adminProductos extends javax.swing.JFrame {
 
     private void txtPMayoreoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPMayoreoKeyTyped
         char validar = evt.getKeyChar();
+        //Valida solo números
         if (Character.isLetter(validar)) {
             getToolkit().beep();
             evt.consume();
             JOptionPane.showMessageDialog(rootPane, "ingresar solo numeros");
         }
+        //Valida solo un punto decimal
         if (evt.getKeyChar() == '.' && txtPMayoreo.getText().contains(".")) {
             getToolkit().beep();
             evt.consume();
@@ -505,11 +515,13 @@ public class adminProductos extends javax.swing.JFrame {
 
     private void txtPCompraKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPCompraKeyTyped
         char validar = evt.getKeyChar();
+        //Valida solo números
         if (Character.isLetter(validar)) {
             getToolkit().beep();
             evt.consume();
             JOptionPane.showMessageDialog(rootPane, "ingresar solo numeros");
         }
+        //Valida solo un decimal
         if (evt.getKeyChar() == '.' && txtPCompra.getText().contains(".")) {
             getToolkit().beep();
             evt.consume();
@@ -519,6 +531,7 @@ public class adminProductos extends javax.swing.JFrame {
 
     private void txtBuscarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarKeyTyped
         char validar = evt.getKeyChar();
+        //Valida solo números
         if (Character.isLetter(validar)) {
             getToolkit().beep();
             evt.consume();
@@ -528,13 +541,13 @@ public class adminProductos extends javax.swing.JFrame {
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         if (txtBuscar.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(rootPane, "Ingresa un ID");
+            JOptionPane.showMessageDialog(rootPane, "Ingresa un ID");//Revisa que el campo no esté vacío
         } else {
             ConsultasProductoProvedor buscar = new ConsultasProductoProvedor();
-
             try {
                 Producto producto = buscar.consultaProducto(Integer.parseInt(txtBuscar.getText()));
                 Proveedor proveedor = producto.getProveedor();
+                //Rellena los campos
                 txtMarca.setText(producto.getMarca());
                 txtDescripcion.setText(producto.getDescripcion());
                 txtPCompra.setText(Double.toString(producto.getPrecioCompra()));
@@ -546,6 +559,7 @@ public class adminProductos extends javax.swing.JFrame {
                 txtDireccion.setText(proveedor.getDireccion());
                 txtTelefono.setText(Long.toString(proveedor.getTelefono()));
             } catch (NullPointerException e) {
+                //Limpia los campos si no encuentra nada
                 txtMarca.setText("");
                 txtDescripcion.setText("");
                 txtPCompra.setText("");

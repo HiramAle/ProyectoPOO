@@ -26,24 +26,27 @@ import modelo.Producto;
  * @author magic
  */
 public class adminCompras extends javax.swing.JFrame {
-
+    
+    //Crea variables para el carrito de compras
     private int idProd = 0;
-    private Producto prod = null;
-    private ArrayList<Producto> carrito = new ArrayList<Producto>();
     private ArrayList<Double> total = new ArrayList<Double>();
-    ArrayList<Producto> productoCarrito = new ArrayList<Producto>();
-    ArrayList<String> cantidadCarrito = new ArrayList<String>();
+    private ArrayList<Producto> productoCarrito = new ArrayList<Producto>();
+    private ArrayList<String> cantidadCarrito = new ArrayList<String>();
     double totalMonto = 0;
-    Calendar cal = Calendar.getInstance();
-    DateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
+    //Variables para la obtencion de la fecha de la pestaña de Registro
+    private Calendar cal = Calendar.getInstance();
+    private DateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
 
     /**
      * Creates new form adminCompras
      */
     public adminCompras() {
+        //Inicializa los componentes
         initComponents();
+        //Establece el título
+        this.setTitle("Compras");
+        //Escribe la fecha en el jText de la fecha de la pestaña de Registro
         txtFechaCompra.setText(formato.format(cal.getTime()).toString());
-
     }
 
     /**
@@ -104,6 +107,12 @@ public class adminCompras extends javax.swing.JFrame {
 
         jLabel9.setText("Productos");
 
+        txtProveedor.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtProveedorKeyTyped(evt);
+            }
+        });
+
         btnBuscarProveedor.setText("Buscar");
         btnBuscarProveedor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -148,7 +157,19 @@ public class adminCompras extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(tableProductos);
 
+        txtIdCompraR.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtIdCompraRKeyTyped(evt);
+            }
+        });
+
         jLabel10.setText("Cantidad");
+
+        txtCantidadCompra.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCantidadCompraKeyTyped(evt);
+            }
+        });
 
         btnAñadirCompra.setText("Añadir");
         btnAñadirCompra.addActionListener(new java.awt.event.ActionListener() {
@@ -199,46 +220,43 @@ public class adminCompras extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addGap(18, 18, 18)
+                                .addComponent(txtIdCompraR, javax.swing.GroupLayout.DEFAULT_SIZE, 197, Short.MAX_VALUE))
+                            .addComponent(jLabel9)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel6)
+                                    .addComponent(jLabel3))
+                                .addGap(18, 18, 18)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(txtProveedor, javax.swing.GroupLayout.DEFAULT_SIZE, 199, Short.MAX_VALUE)
+                                    .addComponent(txtFechaCompra))))
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jLabel1)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(txtIdCompraR, javax.swing.GroupLayout.DEFAULT_SIZE, 197, Short.MAX_VALUE))
-                                    .addComponent(jLabel9)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel6)
-                                            .addComponent(jLabel3))
-                                        .addGap(18, 18, 18)
-                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                            .addComponent(txtProveedor, javax.swing.GroupLayout.DEFAULT_SIZE, 199, Short.MAX_VALUE)
-                                            .addComponent(txtFechaCompra))))
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGap(18, 18, 18)
-                                        .addComponent(btnBuscarProveedor))
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGap(221, 221, 221)
-                                        .addComponent(jLabel10)
-                                        .addGap(29, 29, 29)
-                                        .addComponent(txtCantidadCompra, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(btnAñadirCompra))))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(44, 44, 44)
-                                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 326, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel4)
                                 .addGap(18, 18, 18)
-                                .addComponent(txtMontoCompra, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addComponent(btnBuscarProveedor))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(221, 221, 221)
+                                .addComponent(jLabel10)
+                                .addGap(29, 29, 29)
+                                .addComponent(txtCantidadCompra, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnAñadirCompra))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(243, 243, 243)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(44, 44, 44)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 326, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addGap(18, 18, 18)
+                        .addComponent(txtMontoCompra, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(147, 147, 147)
                         .addComponent(txtRegistrar)))
                 .addContainerGap(20, Short.MAX_VALUE))
         );
@@ -269,14 +287,13 @@ public class adminCompras extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(51, 51, 51)
+                        .addGap(50, 50, 50)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel4)
-                            .addComponent(txtMontoCompra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(92, 92, 92)
-                        .addComponent(txtRegistrar))
+                            .addComponent(txtMontoCompra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtRegistrar)))
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(162, 162, 162))
+                .addGap(277, 277, 277))
         );
 
         jTabbedPane1.addTab("Registrar Compra", jPanel1);
@@ -381,7 +398,7 @@ public class adminCompras extends javax.swing.JFrame {
                 .addComponent(jLabel8)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(305, Short.MAX_VALUE))
+                .addContainerGap(47, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Consultar Compra", jPanel2);
@@ -399,8 +416,8 @@ public class adminCompras extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTabbedPane1)
-                .addContainerGap())
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 440, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -408,17 +425,25 @@ public class adminCompras extends javax.swing.JFrame {
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         if (txtIdCompra.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(rootPane, "Ingresa un ID");
+            JOptionPane.showMessageDialog(rootPane, "Ingresa un ID"); //Valida que el campo no esté vacío
         } else {
             ConsultasProductoProvedor buscar = new ConsultasProductoProvedor();
             try {
-                DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
+                //Establece la fecha de compra en la pestaña de Consulta
+                DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                 Compra compra = buscar.consultaCompra(Integer.parseInt(txtIdCompra.getText()));
                 txtFecha.setText(dateFormat.format(compra.getFecha()));
                 txtMonto.setText("$ " + compra.getMonto());
-
-                DefaultTableModel modelo = new DefaultTableModel();
+                //Establece el modelo de la tabla para que no sea editable
+                DefaultTableModel modelo = new DefaultTableModel() {
+                    @Override
+                    public boolean isCellEditable(int row, int column) {
+                        return false;
+                    }
+                };
+                //Aplica el modelo
                 tblProductos.setModel(modelo);
+                //Pone los encabezados de las columnas
                 modelo.addColumn("Id Producto");
                 modelo.addColumn("Marca");
                 modelo.addColumn("Descripcion");
@@ -426,7 +451,9 @@ public class adminCompras extends javax.swing.JFrame {
                 modelo.addColumn("Venta mayoreo");
                 modelo.addColumn("Venta menudeo");
                 modelo.addColumn("Existencias");
+                //Crea un arreglo de objetos para las filas
                 Object[] o = null;
+                //Rellena las filas
                 for (int i = 0; i < compra.getPds().size(); i++) {
                     modelo.addRow(o);
                     modelo.setValueAt(compra.getPds().get(i).getId(), i, 0);
@@ -436,7 +463,6 @@ public class adminCompras extends javax.swing.JFrame {
                     modelo.setValueAt(compra.getPds().get(i).getPrecioVentaMayoreo(), i, 4);
                     modelo.setValueAt(compra.getPds().get(i).getPrecioVentaMenudeo(), i, 5);
                     modelo.setValueAt(compra.getPds().get(i).getExistencias(), i, 6);
-
                 }
             } catch (NullPointerException e) {
                 System.out.println(e);
@@ -448,12 +474,21 @@ public class adminCompras extends javax.swing.JFrame {
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
+        //Limpia los campos
         txtIdCompra.setText("");
         txtFecha.setText("");
         txtFecha.setText("");
         txtMonto.setText("");
-        DefaultTableModel modelo = new DefaultTableModel();
+        //Establece el modelo para que la tabla no sea editable
+        DefaultTableModel modelo = new DefaultTableModel() {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        //Aplica el modelo a la tabla
         tblProductos.setModel(modelo);
+        //Pone los encabezados de las columnas
         modelo.addColumn("Id Producto");
         modelo.addColumn("Marca");
         modelo.addColumn("Descripcion");
@@ -461,42 +496,54 @@ public class adminCompras extends javax.swing.JFrame {
         modelo.addColumn("Venta mayoreo");
         modelo.addColumn("Venta menudeo");
         modelo.addColumn("Existencias");
+        //Elimina todas las filas
         modelo.setRowCount(0);
     }//GEN-LAST:event_btnLimpiarActionPerformed
 
     private void btnBuscarProveedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarProveedorActionPerformed
         if (txtProveedor.getText().isEmpty()) {
-            System.out.println("1");
+            JOptionPane.showMessageDialog(null, "Rellene el campo de proveedor"); //Valida que los campos estén llenos
         } else {
             try {
                 ConsultasProductoProvedor buscar = new ConsultasProductoProvedor();
                 ArrayList<Producto> pds = new ArrayList<Producto>();
-
                 pds = buscar.arrayProductos(Integer.parseInt(txtProveedor.getText()));
-                if (pds.isEmpty()) {
+                if (pds.isEmpty()) {  //Revisa que esté vacío
                     JOptionPane.showMessageDialog(null, "No existe Compra con ese ID");
-                    DefaultTableModel modelo = new DefaultTableModel();
+                    //Establece el modelo de la tabla para que no sea editable
+                    DefaultTableModel modelo = new DefaultTableModel(){
+                        @Override
+                        public boolean isCellEditable(int row, int column) {
+                            return false;
+                        }
+                    };
+                    //Aplica el modelo a la tabl
                     tableProductos.setModel(modelo);
+                    //Establece el nombre de las columnas
                     modelo.addColumn("Id Producto");
                     modelo.addColumn("Marca");
                     modelo.addColumn("Descripcion");
                     modelo.addColumn("Precio de Compra");
                     modelo.addColumn("Existencias");
                 } else {
+                    //Establece el modelo de la tabla para que no sea editable
                     DefaultTableModel modelo = new DefaultTableModel() {
                         @Override
                         public boolean isCellEditable(int row, int column) {
                             return false;
                         }
-
                     };
+                    //Establece el modelo de la tabla
                     tableProductos.setModel(modelo);
+                    //Establece las columnas de la tabla
                     modelo.addColumn("Id Producto");
                     modelo.addColumn("Marca");
                     modelo.addColumn("Descripcion");
                     modelo.addColumn("Precio de Compra");
                     modelo.addColumn("Existencias");
+                    //Crea un arreglo de objetos para llenar la tabla
                     Object[] o = null;
+                    //Llena la tabla con las filas
                     for (int i = 0; i < pds.size(); i++) {
                         modelo.addRow(o);
                         modelo.setValueAt(pds.get(i).getId(), i, 0);
@@ -504,7 +551,6 @@ public class adminCompras extends javax.swing.JFrame {
                         modelo.setValueAt(pds.get(i).getDescripcion(), i, 2);
                         modelo.setValueAt(pds.get(i).getPrecioCompra(), i, 3);
                         modelo.setValueAt(pds.get(i).getExistencias(), i, 4);
-
                     }
                 }
 
@@ -517,15 +563,15 @@ public class adminCompras extends javax.swing.JFrame {
 
 
     private void tableProductosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableProductosMouseClicked
-        if (tableProductos != null && tableProductos.getModel() != null) {
-
+        //Averigua en qué fila se hizo click
+        if (tableProductos != null && tableProductos.getModel() != null) { //Revisa que la tabla no esté vacía
+            //Obtiene el numero de la fila y de la columna
             int row = tableProductos.rowAtPoint(evt.getPoint());
             int col = tableProductos.columnAtPoint(evt.getPoint());
             if (tableProductos.getValueAt(row, col) != null) {
                 String st = tableProductos.getModel().getValueAt(row, 0).toString();
                 System.out.println(st);
                 idProd = Integer.parseInt(st);
-
             }
 
         }
@@ -534,91 +580,104 @@ public class adminCompras extends javax.swing.JFrame {
     }//GEN-LAST:event_tableProductosMouseClicked
 
     private void btnAñadirCompraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAñadirCompraActionPerformed
-        if (txtCantidadCompra.getText().isEmpty() || Integer.parseInt(txtCantidadCompra.getText()) == 0 || idProd == 0) {
+        if (txtCantidadCompra.getText().isEmpty() || Integer.parseInt(txtCantidadCompra.getText()) == 0 || idProd == 0) { //Verifica que los campos estén llenos
             JOptionPane.showMessageDialog(null, "Llene todos los campos");
         } else {
-            //if (Integer.parseInt(txtCantidadCompra.getText()) != 0) {
-            System.out.println(idProd);
             ConsultasProductoProvedor buscar = new ConsultasProductoProvedor();
-            //Alta Compra_Producto
-            //buscar.altaCompraProducto(Integer.parseInt(txtIdCompraR.getText()), Integer.parseInt(txtCantidadCompra.getText()), idProd);
             Producto pr = new Producto();
+            //Busca y mapea el producto
             pr = buscar.consultaProducto(idProd);
-            System.out.println(pr.getMarca());
-            //ArrayList<Producto> productoCarrito = new ArrayList<Producto>();
-
+            //Añade el producto al carrito de compras
             productoCarrito.add(pr);
+            //Calcula el total de cada compra multiplicando el precio por la cantidad
             total.add((pr.getPrecioCompra() * Double.parseDouble(txtCantidadCompra.getText())));
+            //Añade la cantidad productos al arreglo del carrito de compras
             cantidadCarrito.add(txtCantidadCompra.getText());
-            System.out.println(productoCarrito.get(0).getProveedor().getCompania());
-            //Crea la Tabla
+            //Crea la Tabla con un modelo para que no sea editable
             DefaultTableModel modelo = new DefaultTableModel() {
                 @Override
                 public boolean isCellEditable(int row, int column) {
                     return false;
                 }
-
             };
+            //Aplica el modelo
             tableCarrito.setModel(modelo);
+            //Crea las columnas de la tabla
             modelo.addColumn("Id Producto");
             modelo.addColumn("Marca");
             modelo.addColumn("Descripcion");
             modelo.addColumn("Total");
+            //Crea un arreglo de objetos para las filas de la tabla
             Object[] o = null;
+            //Llena la tabla con las filas
             for (int i = 0; i < productoCarrito.size(); i++) {
                 modelo.addRow(o);
                 modelo.setValueAt(productoCarrito.get(i).getId(), i, 0);
                 modelo.setValueAt(productoCarrito.get(i).getMarca(), i, 1);
                 modelo.setValueAt(productoCarrito.get(i).getDescripcion(), i, 2);
                 modelo.setValueAt("$" + total.get(i), i, 3);
-
             }
-
+            //Calcula el total de la compra con base a el precio de los productos
             for (int i = 0; i < total.size(); i++) {
                 totalMonto += total.get(i);
             }
-
+            //Pone el total en el jText
             txtMontoCompra.setText("$ " + Double.toString(totalMonto));
-
-            //}
         }
 
     }//GEN-LAST:event_btnAñadirCompraActionPerformed
 
     private void txtRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtRegistrarActionPerformed
         ConsultasProductoProvedor registro = new ConsultasProductoProvedor();
-        if (txtIdCompraR.getText().isEmpty()) {
+        if (txtIdCompraR.getText().isEmpty()) { //Verifica que los campos estén llenos
             JOptionPane.showMessageDialog(null, "Llene todos los campos");
-        }else{
+        } else {
             try {
-
-            java.util.Date date = new java.util.Date();
-
-            java.sql.Date sqlDate = new java.sql.Date(date.getTime());
-
-            registro.altaCompra(Integer.parseInt(txtIdCompraR.getText()), sqlDate, totalMonto);
-
-            for (int i = 0; i < productoCarrito.size(); i++) {
-                registro.altaCompraProducto(Integer.parseInt(txtIdCompraR.getText()), Integer.parseInt(cantidadCarrito.get(i)), productoCarrito.get(i).getId());
-                
-                registro.actualizarExistencias(productoCarrito.get(i).getExistencias()+Integer.parseInt(cantidadCarrito.get(i)), productoCarrito.get(i).getId());
+                //Crea variables de fecha para guardar los datos en la Base
+                java.util.Date date = new java.util.Date();
+                java.sql.Date sqlDate = new java.sql.Date(date.getTime());
+                if (registro.altaCompra(Integer.parseInt(txtIdCompraR.getText()), sqlDate, totalMonto)) { // Verifica el Alta
+                    for (int i = 0; i < productoCarrito.size(); i++) { //Hace el alta de la relacion Compra-Producto 
+                        registro.altaCompraProducto(Integer.parseInt(txtIdCompraR.getText()), Integer.parseInt(cantidadCarrito.get(i)), productoCarrito.get(i).getId());
+                        registro.actualizarExistencias(productoCarrito.get(i).getExistencias() + Integer.parseInt(cantidadCarrito.get(i)), productoCarrito.get(i).getId());
+                    }
+                    JOptionPane.showMessageDialog(null, "Registro Exitoso");
+                }
+            } catch (NullPointerException e) {
+                System.out.println(e);
             }
-            
-            
-            
-            
-            
-            JOptionPane.showMessageDialog(null, "Registro Exitoso");
-
-        } catch (NullPointerException e) {
-            System.out.println(e);
         }
-        }
-
-        
-
-
     }//GEN-LAST:event_txtRegistrarActionPerformed
+
+    private void txtIdCompraRKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtIdCompraRKeyTyped
+        char validar = evt.getKeyChar();
+        //Verifica que solo se usen numeros
+        if (Character.isLetter(validar)) {
+            getToolkit().beep();
+            evt.consume();
+            JOptionPane.showMessageDialog(rootPane, "ingresar solo numeros");
+        }
+    }//GEN-LAST:event_txtIdCompraRKeyTyped
+
+    private void txtProveedorKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtProveedorKeyTyped
+        char validar = evt.getKeyChar();
+        //Verifica que solo se usen numeros
+        if (Character.isLetter(validar)) {
+            getToolkit().beep();
+            evt.consume();
+            JOptionPane.showMessageDialog(rootPane, "ingresar solo numeros");
+        }
+    }//GEN-LAST:event_txtProveedorKeyTyped
+
+    private void txtCantidadCompraKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCantidadCompraKeyTyped
+        char validar = evt.getKeyChar();
+        //Verifica que solo se usen numeros
+        if (Character.isLetter(validar)) {
+            getToolkit().beep();
+            evt.consume();
+            JOptionPane.showMessageDialog(rootPane, "ingresar solo numeros");
+        }
+    }//GEN-LAST:event_txtCantidadCompraKeyTyped
 
     /**
      * @param args the command line arguments
