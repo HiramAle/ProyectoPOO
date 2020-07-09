@@ -27,7 +27,7 @@ public class ConexionBD {
     private ConexionBD(){
         this.ip ="127.0.0.1";
         this.usuario = "root"; 
-        this.contrasenia = ""; 
+        this.contrasenia = "admin"; 
         this.bd = "base_proyecto";
     }
     
