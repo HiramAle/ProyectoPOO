@@ -349,9 +349,10 @@ public class adminProductos extends javax.swing.JFrame {
         } else {
             int id = Integer.parseInt(txtBuscar.getText());
             ConsultasProductoProvedor eliminar = new ConsultasProductoProvedor();
+            ConsultasProductoProvedor buscar = new ConsultasProductoProvedor();
             try {
                 Producto producto = new Producto();
-                producto = eliminar.consultaProducto(id);
+                producto = buscar.consultaProducto(id);
                 if (eliminar.eliminarProducto(id)) {  //Elimina el registro
                     JOptionPane.showMessageDialog(rootPane, "Se elimino este registro");
                     //Limpia los campos
