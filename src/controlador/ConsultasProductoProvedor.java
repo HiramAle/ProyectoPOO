@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package controlador;
 
 import java.sql.Connection;
@@ -16,10 +11,6 @@ import modelo.Producto;
 import modelo.Proveedor;
 import modelo.Compra;
 
-/**
- *
- * @author Ale
- */
 public class ConsultasProductoProvedor {
 
     //Variables para la consulta y conexion de la base de datos

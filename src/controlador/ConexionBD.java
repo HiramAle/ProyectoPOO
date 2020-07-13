@@ -27,7 +27,7 @@ public class ConexionBD {
     private ConexionBD(){
         this.ip ="127.0.0.1";
         this.usuario = "root"; 
-        this.contrasenia = "admin"; 
+        this.contrasenia = "n0m3l0s3"; 
         this.bd = "base_proyecto";
     }
     
@@ -37,7 +37,7 @@ public class ConexionBD {
     
     public boolean conectar(){
         try {
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName("com.mysql.cj.jdbc.Driver"); //Lo modifique para mi version de Mysql , este es el anterior: com.mysql.jdbc.Driver
             cadenaConexion = "jdbc:mysql://";
             cadenaConexion += ip;
             cadenaConexion += "/"+bd;
