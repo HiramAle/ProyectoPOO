@@ -47,6 +47,7 @@ public class ConsultasAcceso {
                 mapLogin();
             }
         } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e.fillInStackTrace());
             JOptionPane.showMessageDialog(null, "Error en la consulta \n verifique el ID");            
         }finally{
            objBD.cerrar(); 

@@ -23,6 +23,10 @@ public class Producto {
 
     public Producto() {
     }
+
+    public Producto(int idProducto, String marca, String descripcion, double precioCompra, double precioVentaMenudeo, double precioVentaMayoreo, Vendedor vendedor, int existencias) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
     
 
