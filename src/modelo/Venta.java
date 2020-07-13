@@ -13,17 +13,14 @@ public class Venta {
     private Proveedor prov;
     //Copia de Compras
     private int cantidad;
-    private ArrayList <Producto> pds = new ArrayList <Producto> () ;
     private int idVenta;
     
 
-    public Venta(int idVenta,int cantidad,java.util.Date fecha, double monto, Proveedor prov, ArrayList <Producto> pds){
+    public Venta(int idVenta,java.util.Date fecha, double monto, Vendedor ven){
         this.idVenta=idVenta;
-        this.cantidad=cantidad;
         this.fecha=fecha;
         this.monto=monto;
-        this.prov=prov;
-        this.pds=pds;
+        this.ven=ven;
     }
 
     public Date getFecha() {
@@ -74,13 +71,7 @@ public class Venta {
         this.cantidad = cantidad;
     }
 
-    public ArrayList<Producto> getPds() {
-        return pds;
-    }
 
-    public void setPds(ArrayList<Producto> pds) {
-        this.pds = pds;
-    }
 
     public int getIdVenta() {
         return idVenta;

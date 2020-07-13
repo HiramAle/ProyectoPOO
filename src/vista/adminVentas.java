@@ -1,7 +1,12 @@
 package vista;
 
+import controlador.ConexionBD;
 import controlador.ConsultasProductoProvedor;
 import controlador.ConsultasVendedorVentas;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -11,6 +16,7 @@ import javax.swing.table.DefaultTableModel;
 import modelo.Cliente;
 import modelo.Compra;
 import modelo.Producto;
+import modelo.Proveedor;
 import modelo.Vendedor;
 import modelo.Venta;
 
@@ -23,6 +29,12 @@ public class adminVentas extends javax.swing.JFrame {
     /**
      * Creates new form adminVentas
      */
+     //Variables para la consulta y conexion de la base de datos
+    private PreparedStatement pstmt;
+    private ResultSet resultado;
+    private Connection con;
+    private ConexionBD objBD;
+
     private int idProd = 0;
     private ArrayList<Double> total = new ArrayList<Double>();
     private ArrayList<Producto> productoCarrito = new ArrayList<Producto>();
@@ -36,6 +48,63 @@ public class adminVentas extends javax.swing.JFrame {
         this.setTitle("Ventas");
         //Escribe la fecha en el jText de la fecha de la pestaña de Registro
         txtFecha.setText(formato.format(cal.getTime()).toString());
+        try{
+        ConsultasVendedorVentas buscar=new ConsultasVendedorVentas();
+        ArrayList<Producto> pds = new ArrayList<Producto>();
+        pds = buscar.arrayProductos();
+        if (pds.isEmpty()) {  //Revisa que esté vacío
+                    JOptionPane.showMessageDialog(null, "No existe Compra con ese ID");
+                    //Establece el modelo de la tabla para que no sea editable
+                    DefaultTableModel modelo = new DefaultTableModel(){
+                        @Override
+                        public boolean isCellEditable(int row, int column) {
+                            return false;
+                        }
+                    };
+                    //Aplica el modelo a la tabl
+                    tablaProductos.setModel(modelo);
+                    //Establece el nombre de las columnas
+                    modelo.addColumn("Id Producto");
+                    modelo.addColumn("Marca");
+                    modelo.addColumn("Descripcion");
+                    modelo.addColumn("Precio de Venta Menudeo");
+                    modelo.addColumn("Precio de Venta Mayoreo");
+                    modelo.addColumn("Existencias");
+                } else {
+                    //Establece el modelo de la tabla para que no sea editable
+                    DefaultTableModel modelo = new DefaultTableModel() {
+                        @Override
+                        public boolean isCellEditable(int row, int column) {
+                            return false;
+                        }
+                    };
+                    //Establece el modelo de la tabla
+                    tablaProductos.setModel(modelo);
+                    //Establece las columnas de la tabla
+                    modelo.addColumn("Id Producto");
+                    modelo.addColumn("Marca");
+                    modelo.addColumn("Descripcion");
+                    modelo.addColumn("Precio de Venta Menudeo");
+                    modelo.addColumn("Precio de Venta Mayoreo");
+                    modelo.addColumn("Existencias");
+                    //Crea un arreglo de objetos para llenar la tabla
+                    Object[] o = null;
+                    //Llena la tabla con las filas
+                    for (int i = 0; i < pds.size(); i++) {
+                        modelo.addRow(o);
+                        modelo.setValueAt(pds.get(i).getId(), i, 0);
+                        modelo.setValueAt(pds.get(i).getMarca(), i, 1);
+                        modelo.setValueAt(pds.get(i).getDescripcion(), i, 2);
+                        modelo.setValueAt(pds.get(i).getPrecioVentaMayoreo(), i, 3);
+                        modelo.setValueAt(pds.get(i).getPrecioVentaMenudeo(), i, 4);
+                        modelo.setValueAt(pds.get(i).getExistencias(), i, 5);
+                    }
+                }
+        }catch(NullPointerException e){
+            System.out.println(e);
+            JOptionPane.showMessageDialog(null, "Ocurrio un error ups");
+        }
+        
     }
 
     /**
@@ -50,12 +119,12 @@ public class adminVentas extends javax.swing.JFrame {
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel2 = new javax.swing.JPanel();
         jLabel16 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        idVenCon = new javax.swing.JTextField();
         jLabel17 = new javax.swing.JLabel();
         jLabel18 = new javax.swing.JLabel();
         jLabel19 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        idCliCon = new javax.swing.JTextField();
+        btnBusVen = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -65,7 +134,7 @@ public class adminVentas extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         txtFecha = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
+        txtMonto = new javax.swing.JTextField();
         btnBuscarVen = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         txtIdVendedor = new javax.swing.JTextField();
@@ -85,7 +154,7 @@ public class adminVentas extends javax.swing.JFrame {
         btnBuscarCli = new javax.swing.JButton();
         jLabel10 = new javax.swing.JLabel();
         txtApellidoPCliente = new javax.swing.JTextField();
-        jButton2 = new javax.swing.JButton();
+        Registrar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tablaProductos = new javax.swing.JTable();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -94,6 +163,7 @@ public class adminVentas extends javax.swing.JFrame {
         jLabel15 = new javax.swing.JLabel();
         txtCantidad = new javax.swing.JTextField();
         jButton3 = new javax.swing.JButton();
+        combo = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -105,33 +175,26 @@ public class adminVentas extends javax.swing.JFrame {
 
         jLabel19.setText("id Cliente");
 
-        jButton1.setText("Buscar");
+        btnBusVen.setText("Buscar");
+        btnBusVen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBusVenActionPerformed(evt);
+            }
+        });
 
         jButton4.setText("Buscar");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+
             },
             new String [] {
-                "id Venta", "Fecha", "Id Vendedor", "Id Cliente", "Monto"
+                "id Venta", "Fecha", "Monto", "id Vendedor", "id Cliente"
             }
         ));
         jScrollPane3.setViewportView(jTable1);
@@ -151,11 +214,11 @@ public class adminVentas extends javax.swing.JFrame {
                             .addComponent(jLabel19))
                         .addGap(44, 44, 44)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 101, Short.MAX_VALUE)
-                            .addComponent(jTextField2))
+                            .addComponent(idVenCon, javax.swing.GroupLayout.DEFAULT_SIZE, 101, Short.MAX_VALUE)
+                            .addComponent(idCliCon))
                         .addGap(25, 25, 25)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jButton1)
+                            .addComponent(btnBusVen)
                             .addComponent(jButton4)))
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 679, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(633, Short.MAX_VALUE))
@@ -168,14 +231,14 @@ public class adminVentas extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel16)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1))
+                    .addComponent(idVenCon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnBusVen))
                 .addGap(20, 20, 20)
                 .addComponent(jLabel18)
                 .addGap(22, 22, 22)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel19)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(idCliCon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton4))
                 .addGap(49, 49, 49)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 317, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -198,7 +261,7 @@ public class adminVentas extends javax.swing.JFrame {
 
         jLabel3.setText("id Vendedor");
 
-        jTextField3.setEditable(false);
+        txtMonto.setEditable(false);
 
         btnBuscarVen.setText("Buscar Vendedor");
         btnBuscarVen.addActionListener(new java.awt.event.ActionListener() {
@@ -244,7 +307,12 @@ public class adminVentas extends javax.swing.JFrame {
 
         txtApellidoPCliente.setEditable(false);
 
-        jButton2.setText("Registrar");
+        Registrar.setText("Registrar");
+        Registrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                RegistrarActionPerformed(evt);
+            }
+        });
 
         tablaProductos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -261,23 +329,28 @@ public class adminVentas extends javax.swing.JFrame {
                 "id Producto", "Marca", "Descripcion", "Precio"
             }
         ));
+        tablaProductos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tablaProductosMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tablaProductos);
 
         tablaCarrito.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
-                "id Producto", "Marca", "Descrpcion", "Precio", "Cantidad"
+                "id Producto", "Marca", "Descrpcion", "Total"
             }
         ));
         jScrollPane2.setViewportView(tablaCarrito);
@@ -287,6 +360,13 @@ public class adminVentas extends javax.swing.JFrame {
         jLabel15.setText("Cantidad");
 
         jButton3.setText("Agregar");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
+        combo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Cliente Invitado", "Cliente Preferente", "Cliente Estrella" }));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -329,14 +409,16 @@ public class adminVentas extends javax.swing.JFrame {
                                             .addComponent(jLabel10)
                                             .addComponent(jLabel12))))
                                 .addGap(40, 40, 40)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(txtNombreVendedor)
-                                    .addComponent(txtApellidoMVendedor)
-                                    .addComponent(txtApellidoPVendedor)
-                                    .addComponent(txtIdCliente)
-                                    .addComponent(txtNombreCliente)
-                                    .addComponent(txtIdVendedor)
-                                    .addComponent(txtApellidoPCliente, javax.swing.GroupLayout.DEFAULT_SIZE, 156, Short.MAX_VALUE))
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(txtNombreVendedor)
+                                        .addComponent(txtApellidoMVendedor)
+                                        .addComponent(txtApellidoPVendedor)
+                                        .addComponent(txtIdCliente)
+                                        .addComponent(txtNombreCliente)
+                                        .addComponent(txtIdVendedor)
+                                        .addComponent(txtApellidoPCliente, javax.swing.GroupLayout.DEFAULT_SIZE, 156, Short.MAX_VALUE))
+                                    .addComponent(combo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(42, 42, 42)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(btnBuscarVen)
@@ -348,9 +430,9 @@ public class adminVentas extends javax.swing.JFrame {
                                     .addGap(156, 156, 156)
                                     .addComponent(jLabel4)
                                     .addGap(18, 18, 18)
-                                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtMonto, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGap(44, 44, 44)
-                                    .addComponent(jButton2))
+                                    .addComponent(Registrar))
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 736, Short.MAX_VALUE)
                                 .addComponent(jScrollPane2))
                             .addGroup(jPanel1Layout.createSequentialGroup()
@@ -408,25 +490,26 @@ public class adminVentas extends javax.swing.JFrame {
                         .addComponent(jLabel11)
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtIdCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnBuscarCli)
-                            .addComponent(jLabel10))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(combo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel10)
+                            .addComponent(txtIdCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(19, 19, 19)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtNombreCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel12))
-                        .addGap(23, 23, 23)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel13)
-                            .addComponent(txtApellidoPCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(140, 140, 140))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(98, 98, 98)))
+                        .addGap(28, 28, 28)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel13, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(txtApellidoPCliente, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(98, 98, 98)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtMonto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4)
-                    .addComponent(jButton2))
+                    .addComponent(Registrar))
                 .addGap(23, 23, 23))
         );
 
@@ -452,30 +535,177 @@ public class adminVentas extends javax.swing.JFrame {
 
     private void btnBuscarVenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarVenActionPerformed
          if (txtIdVendedor.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(rootPane, "Ingresa un ID"); //Valida que el campo no esté vacío
+            JOptionPane.showMessageDialog(rootPane, "Ingresa un ID");//Valida que el campo no esté vacío
         } else {
-           ConsultasVendedorVentas buscar=new ConsultasVendedorVentas();
-           try{
-                //Establece la fecha de compra en la pestaña de Consulta
-                DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                Vendedor vendedor= buscar.consultaVendedor(Integer.parseInt(txtIdVendedor.getText()));
-                
-               
-           }catch(NullPointerException e){
-               System.out.println(e);
-               JOptionPane.showMessageDialog(null,"No existe vendedor con ese ID");
-           }
+            ConsultasVendedorVentas buscar = new  ConsultasVendedorVentas();
+            try {
+                //Llena los campos
+                Vendedor vendedor = buscar.consultaVendedor(Integer.parseInt(txtIdVendedor.getText()));
+                txtIdVendedor.setText(Integer.toString(vendedor.getId()));
+                txtNombreVendedor.setText(vendedor.getNombre());
+                txtApellidoPVendedor.setText(vendedor.getApp());
+                txtApellidoMVendedor.setText(vendedor.getApm());
+            } catch (NullPointerException e) {
+
+            }
         }
     }//GEN-LAST:event_btnBuscarVenActionPerformed
 
     private void btnBuscarCliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarCliActionPerformed
-        //Falta agregar busqueda de Cliente en consultavendedorventas
-        ConsultasVendedorVentas buscar=new ConsultasVendedorVentas();
-        Cliente cli;
-        cli=buscar.consultaCliente(Integer.parseInt(txtIdCliente.getText()));
-        txtNombreCliente.setText(cli.getNombre());
-        txtApellidoPCliente.setText(cli.getApellidoPaterno());
+        int index = combo.getSelectedIndex();
+        String nombre;
+                    String app ;
+            try{
+            switch (index) {
+                case 0:
+                    txtIdCliente.setText("11111");
+                    txtNombreCliente.setText("Invitado");
+                    txtApellidoPCliente.setText("Invitado");
+                    break;
+                case 1:
+                    pstmt = con.prepareStatement("select * from clientepreferente where id_cliente = ?");
+                    pstmt.setInt(1, Integer.parseInt(txtIdCliente.getText()));
+                    resultado = pstmt.executeQuery();  
+                    nombre = resultado.getString("nombre");
+                    app = resultado.getString("apP");
+                    txtNombreCliente.setText(nombre);
+                    txtApellidoPCliente.setText(app);
+                    break;
+                case 2:
+                    pstmt = con.prepareStatement("select * from clienteestrella where id_cliente = ?");
+                    pstmt.setInt(1, Integer.parseInt(txtIdCliente.getText()));
+                    resultado = pstmt.executeQuery();  
+                    nombre = resultado.getString("nombre");
+                    app = resultado.getString("apP");
+                    txtNombreCliente.setText(nombre);
+                    txtApellidoPCliente.setText(app);
+                    break;
+            }
+                
+                
+                
+                
+                
+            }catch(SQLException e){
+                System.out.print(e);
+            }
+        
     }//GEN-LAST:event_btnBuscarCliActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        if (txtCantidad.getText().isEmpty() || Integer.parseInt(txtCantidad.getText()) == 0 || idProd == 0) { //Verifica que los campos estén llenos
+            JOptionPane.showMessageDialog(null, "Llene todos los campos");
+        } else {
+            ConsultasProductoProvedor buscar = new ConsultasProductoProvedor();
+            Producto pr = new Producto();
+            //Busca y mapea el producto
+            pr = buscar.consultaProducto(idProd);
+            //Añade el producto al carrito de compras
+            productoCarrito.add(pr);
+            if(txtIdCliente.getText().length()<=0){
+                JOptionPane.showMessageDialog(null,"Ingrese un id de cliente antes de agregar productos al carrito");
+                txtCantidad.setText("");
+            }else{
+                 if(txtIdCliente.getText().equals("11111")){
+                    //Calcula el total de cada compra multiplicando el precio por la cantidad
+                    total.add((pr.getPrecioVentaMenudeo() * Double.parseDouble(txtCantidad.getText())));
+                    //Añade la cantidad productos al arreglo del carrito de compras
+            cantidadCarrito.add(txtCantidad.getText());
+                }else{
+                    //Calcula el total de cada compra multiplicando el precio por la cantidad
+                    total.add((pr.getPrecioVentaMayoreo() * Double.parseDouble(txtCantidad.getText())));
+                    //Añade la cantidad productos al arreglo del carrito de compras
+                    cantidadCarrito.add(txtCantidad.getText());
+                }
+                 //Crea la Tabla con un modelo para que no sea editable
+                DefaultTableModel modelo = new DefaultTableModel() {
+                    @Override
+                    public boolean isCellEditable(int row, int column) {
+                        return false;
+                    }
+                };
+                //Aplica el modelo
+                tablaCarrito.setModel(modelo);
+                //Crea las columnas de la tabla
+                modelo.addColumn("Id Producto");
+                modelo.addColumn("Marca");
+                modelo.addColumn("Descripcion");
+                modelo.addColumn("Total");
+                //Crea un arreglo de objetos para las filas de la tabla
+                Object[] o = null;
+                //Llena la tabla con las filas
+                for (int i = 0; i < productoCarrito.size(); i++) {
+                    modelo.addRow(o);
+                    modelo.setValueAt(productoCarrito.get(i).getId(), i, 0);
+                    modelo.setValueAt(productoCarrito.get(i).getMarca(), i, 1);
+                    modelo.setValueAt(productoCarrito.get(i).getDescripcion(), i, 2);
+                    modelo.setValueAt("$" + total.get(i), i, 3);
+                }
+                //Calcula el total de la compra con base a el precio de los productos
+                for (int i = 0; i < total.size(); i++) {
+                    totalMonto += total.get(i);
+                }
+                //Pone el total en el jText
+                txtMonto.setText("$ " + Double.toString(totalMonto));
+            }
+           
+            
+            
+        }
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void tablaProductosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaProductosMouseClicked
+        //Averigua en qué fila se hizo click
+        if (tablaProductos != null && tablaProductos.getModel() != null) { //Revisa que la tabla no esté vacía
+            //Obtiene el numero de la fila y de la columna
+            int row = tablaProductos.rowAtPoint(evt.getPoint());
+            int col = tablaProductos.columnAtPoint(evt.getPoint());
+            if (tablaProductos.getValueAt(row, col) != null) {
+                String st = tablaProductos.getModel().getValueAt(row, 0).toString();
+                System.out.println(st);
+                idProd = Integer.parseInt(st);
+            }
+
+        }
+    }//GEN-LAST:event_tablaProductosMouseClicked
+
+    private void btnBusVenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBusVenActionPerformed
+        ConsultasVendedorVentas f=new ConsultasVendedorVentas(); 
+        int id=Integer.parseInt(idVenCon.getText());
+        try {
+            f.llenarTabla(jTable1,id);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(rootPane, e.getMessage());
+        }         
+    }//GEN-LAST:event_btnBusVenActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        ConsultasVendedorVentas f=new ConsultasVendedorVentas(); 
+        int id=Integer.parseInt(idCliCon.getText());
+        try {
+            f.llenarTabla2(jTable1,id);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(rootPane, e.getMessage());
+        }   
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void RegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RegistrarActionPerformed
+        ConsultasVendedorVentas registro = new ConsultasVendedorVentas();
+        if (txtidVenta.getText().isEmpty()) { //Verifica que los campos estén llenos
+            JOptionPane.showMessageDialog(null, "Llene todos los campos");
+        } else {
+            try {
+                //Crea variables de fecha para guardar los datos en la Base
+                java.util.Date date = new java.util.Date();
+                java.sql.Date sqlDate = new java.sql.Date(date.getTime());
+                if (registro.altaVenta(Integer.parseInt(txtidVenta.getText()), sqlDate, totalMonto,Integer.parseInt(txtIdVendedor.getText()),Integer.parseInt(txtIdCliente.getText()))) { // Verifica el Alta
+                    JOptionPane.showMessageDialog(null, "Registro Exitoso");
+                }
+            } catch (NullPointerException e) {
+                System.out.println(e);
+            }
+        }
+    }//GEN-LAST:event_RegistrarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -513,10 +743,13 @@ public class adminVentas extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton Registrar;
+    private javax.swing.JButton btnBusVen;
     private javax.swing.JButton btnBuscarCli;
     private javax.swing.JButton btnBuscarVen;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JComboBox<String> combo;
+    private javax.swing.JTextField idCliCon;
+    private javax.swing.JTextField idVenCon;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
@@ -545,9 +778,6 @@ public class adminVentas extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
     private javax.swing.JTable tablaCarrito;
     private javax.swing.JTable tablaProductos;
     private javax.swing.JTextField txtApellidoMVendedor;
@@ -557,6 +787,7 @@ public class adminVentas extends javax.swing.JFrame {
     private javax.swing.JTextField txtFecha;
     private javax.swing.JTextField txtIdCliente;
     private javax.swing.JTextField txtIdVendedor;
+    private javax.swing.JTextField txtMonto;
     private javax.swing.JTextField txtNombreCliente;
     private javax.swing.JTextField txtNombreVendedor;
     private javax.swing.JTextField txtidVenta;
